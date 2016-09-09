@@ -10,7 +10,8 @@ SET(EXECUTABLE_OUTPUT_PATH ../)
 
 #include and link lib path
 INCLUDE_DIRECTORIES(/usr/local/include 
-                    /Users/xiedonghai/Programs/Project/modules/CvLib)
+                    /Users/xiedonghai/Programs/Project/modules/CvLib
+                    )
 
 LINK_DIRECTORIES(/usr/local/lib        
                  ../lib
@@ -62,4 +63,5 @@ ADD_EXECUTABLE(testOperatorOverride testOperatorOverride.cpp)
 #TARGET_LINK_LIBRARIES( DetectSift ${OpenCV_LIBS} )
 
 
-ADD_EXECUTABLE(rp relativepose.cpp)
+ADD_EXECUTABLE(pano_rp pano_rp.cpp)
+TARGET_LINK_LIBRARIES(pano2plane  ${OpenCV_LIBS} )
