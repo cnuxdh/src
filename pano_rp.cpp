@@ -3,6 +3,11 @@
 #include"stdio.h"
 
 
+#include<vector>
+using namespace std;
+
+
+
 //5point lib
 #include"5point.h"
 
@@ -11,10 +16,57 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
+//cvlib
+#include"feature.hpp"
+#include"sift.hpp"
+#include"register.hpp"
+#include"panorama.hpp"
+#include"relativepose.hpp"
+#include"ba.hpp"
 
 
 
-int main()
+
+//mosaic the image for feature matching
+IplImage* VerticalMosaic(IplImage* pLeft, IplImage* pRight)
+{	
+	int nLeftWd = pLeft->width;
+	int nLeftHt = pLeft->height;
+	int nScanWdLeft = pLeft->widthStep;
+
+	int nRightWd = pRight->width;
+	int nRightHt = pRight->height;
+	int nScanWdRight = pRight->widthStep;
+
+	int oht = nLeftHt + nRightHt;
+	int owd = max(nLeftWd, nRightWd);
+
+	IplImage* pMosaicImage = cvCreateImage( cvSize(owd,oht), 8, 3);
+	int oscanWd = pMosaicImage->widthStep;
+
+
+	for(int j=0; j<nLeftHt; j++)
+		for(int i=0; i<nLeftWd; i++)
+		{
+			pMosaicImage->imageData[j*oscanWd + i*3]   = pLeft->imageData[j*nScanWdLeft + i*3];
+			pMosaicImage->imageData[j*oscanWd + i*3+1] = pLeft->imageData[j*nScanWdLeft + i*3+1];
+			pMosaicImage->imageData[j*oscanWd + i*3+2] = pLeft->imageData[j*nScanWdLeft + i*3+2];
+		}
+
+		for(int j=0; j<nRightHt; j++)
+			for(int i=0; i<nRightWd; i++)
+			{
+				pMosaicImage->imageData[(j+nLeftHt)*oscanWd + i*3]   = pRight->imageData[j*nScanWdRight + i*3];
+				pMosaicImage->imageData[(j+nLeftHt)*oscanWd + i*3+1] = pRight->imageData[j*nScanWdRight + i*3+1];
+				pMosaicImage->imageData[(j+nLeftHt)*oscanWd + i*3+2] = pRight->imageData[j*nScanWdRight + i*3+2];
+			}
+
+			return pMosaicImage;
+}
+
+
+
+int main(int argc, char* argv[])
 {
 	
 	printf("relative pose estimation ....  \n");
@@ -71,26 +123,27 @@ int main()
 	}
 	//////////////////////////////////////////////////////////////////////////
 
-	if( strlen(leftImageFile)<3 || strlen(leftImageFile)<3)
+	if( strlen(leftImageFile)<3 || strlen(rightImageFile)<3)
 	{
 		printf("no files... \n");
 		return -1;
 	}
 
 
-  IplImage* lImage = cvLoadImage(file1);
-	IplImage* rImage = cvLoadImage(file2);
+  IplImage* lImage = cvLoadImage(leftImageFile);
+	IplImage* rImage = cvLoadImage(rightImageFile);
 	
-	printf("%s \n", file1);
-	printf("%s \n", file2);
+	
+	printf("%s \n", leftImageFile);
+	printf("%s \n", rightImageFile);
 
 	//1. feature detection
 	CFeatureBase* pFeatDetect = new CSIFTFloat(); 
 	//CFeatureBase* pFeatDetect = new CSURF(); 
 	ImgFeature lImageFeats;
 	ImgFeature rImageFeats;
-	pFeatDetect->Detect(file1, lImageFeats);
-	pFeatDetect->Detect(file2, rImageFeats);
+	pFeatDetect->Detect(leftImageFile, lImageFeats);
+	pFeatDetect->Detect(rightImageFile, rImageFeats);
 	
 	//convert from spherical to real 3D
 	int ht = lImage->height;

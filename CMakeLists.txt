@@ -11,11 +11,15 @@ SET(EXECUTABLE_OUTPUT_PATH ../)
 #include and link lib path
 INCLUDE_DIRECTORIES(/usr/local/include 
                     /Users/xiedonghai/Programs/Project/modules/CvLib
-                    )
+                    ../modules/5point
+                    ../modules/matrix
+                    ../modules/sfm-driver)
 
 LINK_DIRECTORIES(/usr/local/lib        
                  ../lib
-                 /Users/xiedonghai/Programs/Project/build/modules/CvLib)
+                 /Users/xiedonghai/Programs/Project/build/modules/CvLib
+                 /Users/xiedonghai/Programs/Project/build/modules/5point
+                 )
 
 
 #set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
@@ -64,4 +68,4 @@ ADD_EXECUTABLE(testOperatorOverride testOperatorOverride.cpp)
 
 
 ADD_EXECUTABLE(pano_rp pano_rp.cpp)
-TARGET_LINK_LIBRARIES(pano2plane  ${OpenCV_LIBS} )
+TARGET_LINK_LIBRARIES(pano_rp  ${OpenCV_LIBS} corelib cvlib 5point)
