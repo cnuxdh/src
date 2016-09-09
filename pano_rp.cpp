@@ -5,6 +5,8 @@
 
 #include"5point.h"
 
+//opencv lib
+
 
 
 int main()
@@ -12,7 +14,8 @@ int main()
 	
 	printf("relative pose estimation ....  \n");
 	
-  
+	char* filepath = "";
+	
   
   
   	

@@ -1,0 +1,12 @@
+
+*.cmake
+
+*.make
+
+*.txt
+
+*.marks
+
+Makefile
+
+.DS_Store
