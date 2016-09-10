@@ -22,7 +22,8 @@ using namespace std;
 #include"register.hpp"
 #include"panorama.hpp"
 #include"relativepose.hpp"
-#include"ba.hpp"
+#include"bundlerio.hpp"
+
 
 
 
@@ -222,7 +223,7 @@ int main(int argc, char* argv[])
 	fclose(fp);
 	
 	double E[9];
-	CalculateEssentialMatrix(R, T, E);
+	CalculateEssentialMatrix1(R, T, E);
 	fp = fopen("panoFM.txt", "w");
 	for(int j=0; j<3; j++)
 	{

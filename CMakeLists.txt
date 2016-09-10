@@ -13,12 +13,17 @@ INCLUDE_DIRECTORIES(/usr/local/include
                     /Users/xiedonghai/Programs/Project/modules/CvLib
                     ../modules/5point
                     ../modules/matrix
-                    ../modules/sfm-driver)
+                    ../modules/sfm-driver
+                    ../modules/Corelib
+                    ../modules/Coredll)
+
 
 LINK_DIRECTORIES(/usr/local/lib        
                  ../lib
                  /Users/xiedonghai/Programs/Project/build/modules/CvLib
                  /Users/xiedonghai/Programs/Project/build/modules/5point
+                 /Users/xiedonghai/Programs/Project/build/modules/CoreDll
+                 /Users/xiedonghai/Programs/Project/build/modules/siftLib
                  )
 
 
@@ -53,7 +58,7 @@ ADD_EXECUTABLE(smiledetect smiledetect.cpp)
 TARGET_LINK_LIBRARIES(smiledetect opencv_core opencv_highgui opencv_objdetect opencv_imgproc opencv_nonfree)
 
 ADD_EXECUTABLE(pano2plane pano2plane.cpp)
-TARGET_LINK_LIBRARIES(pano2plane  ${OpenCV_LIBS} minpack lapack blas image f2c cblas matrix corelib cvlib)
+TARGET_LINK_LIBRARIES(pano2plane  ${OpenCV_LIBS} minpack lapack blas image f2c cblas matrix cvlib)
 
 
 #ADD_EXECUTABLE(testVoidPointer testVoidPointer.cpp)
@@ -68,4 +73,6 @@ ADD_EXECUTABLE(testOperatorOverride testOperatorOverride.cpp)
 
 
 ADD_EXECUTABLE(pano_rp pano_rp.cpp)
-TARGET_LINK_LIBRARIES(pano_rp  ${OpenCV_LIBS} corelib cvlib 5point)
+TARGET_LINK_LIBRARIES(pano_rp ${OpenCV_LIBS} 
+minpack lapack blas image f2c cblas 5point ANN_char matrix 
+cvlib )

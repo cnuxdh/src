@@ -8,8 +8,17 @@
 
 
 //opencv
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#ifdef OPENCV_1X 
+	#include "cv.h"
+	#include "highgui.h"
+	#include "cxcore.h"
+#else
+	#include "opencv2/core/core.hpp"
+	#include "opencv2/highgui/highgui.hpp"
+	#include "opencv2/calib3d/calib3d.hpp"
+	using namespace cv;
+#endif
+
 
 
 #define PI 3.1415926
