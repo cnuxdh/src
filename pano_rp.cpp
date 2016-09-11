@@ -377,7 +377,7 @@ int main(int argc, char* argv[])
 	pModel->Save("sphericalModel.ply", vPts, vColors);
 
 
-	//generate projection images
+	//6. generate projection images
 	PanoToPlanes(leftImageFile, anglestep, vangle, hangle, focalratio, R0, T0);
 	PanoToPlanes(rightImageFile, anglestep, vangle, hangle, focalratio, R, T);
 	
