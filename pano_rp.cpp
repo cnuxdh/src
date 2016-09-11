@@ -70,10 +70,10 @@ IplImage* VerticalMosaic(IplImage* pLeft, IplImage* pRight)
 int main(int argc, char* argv[])
 {
 	
-	printf("relative pose estimation ....  \n");
+	printf(" relative pose estimation ....  \n");
 	
 	
-	printf("%d \n", argc);
+	//printf("%d \n", argc);
 
 	char leftImageFile[256];
 	char rightImageFile[256];
@@ -126,7 +126,8 @@ int main(int argc, char* argv[])
 
 	if( strlen(leftImageFile)<3 || strlen(rightImageFile)<3)
 	{
-		printf("no files... \n");
+		//printf("no files... \n");
+		printf("Usage: \n  -left leftimage -right rightimage -out outfile -bundleout bundleout [-mosaic] \n");
 		return -1;
 	}
 
@@ -146,7 +147,7 @@ int main(int argc, char* argv[])
 	pFeatDetect->Detect(leftImageFile, lImageFeats);
 	pFeatDetect->Detect(rightImageFile, rImageFeats);
 	
-	//convert from spherical to real 3D
+	
 	int ht = lImage->height;
 	int wd = lImage->width;
 
@@ -184,6 +185,8 @@ int main(int argc, char* argv[])
 		double dis = sqrt( (double)( (pl.x-pr.x)*(pl.x-pr.x) + (pl.y-pr.y)*(pl.y-pr.y)) );
 		if(dis<5) continue;
 		
+		
+		//remove the points at the bottom of panorama image
 		if( pl.y<ht*ratio && pr.y<ht*ratio )
 		{
 			Point2DDouble ip;
@@ -193,7 +196,8 @@ int main(int argc, char* argv[])
 			ip.p[0] = pr.x;
 			ip.p[1] = pr.y;
 			rptImagePts.push_back(ip);
-
+		
+		  //convert from spherical to real 3D
 			Point3DDouble gp;					
 			SphereTo3D(pl.x, pl.y, radius, gp.p[0], gp.p[1], gp.p[2]);
 			lptPano.push_back(gp);
@@ -208,6 +212,8 @@ int main(int argc, char* argv[])
 	residual.resize(lptPano.size());
 	EstimatePose5Point_Pano(lptPano, rptPano, radius, 500, 2.5, R, T, residual);
 
+
+	
 	//output the relative pose estimation result
 	FILE* fp = fopen("pano_rt.txt", "w");		
 	fprintf(fp, "%d %d \n", ht, wd);
@@ -287,7 +293,7 @@ int main(int argc, char* argv[])
 
 
 	//5. 3D reconstruction and output
-	double dis = 4.94;     //the real distance of 
+	double dis = 4.94;     //the real distance (m) of two panorama positions
 	double R0[9];
 	double T0[3];
 	memset(R0, 0, sizeof(double)*9);
@@ -337,9 +343,6 @@ int main(int argc, char* argv[])
 	CModelFileBase* pModel = new CPlyModel();
 	pModel->Save("sphericalModel.ply", vPts, vColors);
 
-
-	//projection from panorama to plane 
-	int nAngleStep = 30;
 
 	
 	return 0;
