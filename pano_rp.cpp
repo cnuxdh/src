@@ -81,6 +81,9 @@ int main(int argc, char* argv[])
 	char outFile[256];
 	//double focalLen = 0;
 	bool bIsBundlerOut = false;
+	double vangle=60,hangle=60;
+	double anglestep = 60;
+	double focalratio = 1;
 	
 
 	strcpy(leftImageFile, "\0");
@@ -115,10 +118,38 @@ int main(int argc, char* argv[])
 			bIsBundlerOut = true;
 			printf("output according to bundler's format! \n");
 		}
-		else if( strcmp( argv[i], "-mosaic" ) == 0 )
+		else if( strcmp( argv[i], "-mosaic" ) == 0 ) //mosaic the two image vertically
 		{
 			strcpy(mosaicFile, argv[i+1]);
 			printf("mosaic file: %s \n", mosaicFile);
+			i++;
+		}
+		else if( strcmp( argv[i], "-vangle" ) == 0 ) //vertical angle of the plane image
+		{
+			//strcpy(mosaicFile, argv[i+1]);
+			vangle = atof(argv[i+1]);
+			printf("vertical angle: %lf \n", vangle);
+			i++;
+		}
+		else if( strcmp( argv[i], "-hangle" ) == 0 ) //horizontal angle of the plane image
+		{
+			//strcpy(mosaicFile, argv[i+1]);
+			hangle = atof(argv[i+1]);
+			printf("vertical angle: %lf \n", hangle);
+			i++;
+		}
+		else if( strcmp( argv[i], "-focalratio" ) == 0 ) //ratio between radius and focal length
+		{
+			//strcpy(mosaicFile, argv[i+1]);
+			focalratio = atof(argv[i+1]);
+			printf("vertical angle: %lf \n", focalratio);
+			i++;
+		}
+		else if( strcmp( argv[i], "-anglestep" ) == 0 ) //the angle step for generate plane images
+		{
+			//strcpy(mosaicFile, argv[i+1]);
+			anglestep = atof(argv[i+1]);
+			printf("vertical angle: %lf \n", anglestep);
 			i++;
 		}
 	}
@@ -127,7 +158,9 @@ int main(int argc, char* argv[])
 	if( strlen(leftImageFile)<3 || strlen(rightImageFile)<3)
 	{
 		//printf("no files... \n");
-		printf("Usage: \n  -left leftimage -right rightimage -out outfile -bundleout bundleout [-mosaic] \n");
+		printf("Usage: \n  -left leftimage -right rightimage -out outfile -bundleout bundleout \
+		-vangle vangle -hangle hangle -focallen focallen \
+		[-mosaic] \n");
 		return -1;
 	}
 
@@ -344,6 +377,11 @@ int main(int argc, char* argv[])
 	pModel->Save("sphericalModel.ply", vPts, vColors);
 
 
+	//generate projection images
+	PanoToPlanes(leftImageFile, anglestep, vangle, hangle, focalratio, R0, T0);
+	PanoToPlanes(rightImageFile, anglestep, vangle, hangle, focalratio, R, T);
+	
+	
 	
 	return 0;
 }

@@ -57,7 +57,9 @@ int main(int argc, char* argv[])
 	printf("direction: %lf %lf %lf \n", direction[0], direction[1], direction[2]);
 	char outfile[256];
 	sprintf(outfile, "%d_%d.jpg", int(lat/PI*180), int(lon/PI*180));
-	PanoToPlane(filename, outfile, vangle, hangle, direction, 1);
+	
+	double pR[9];
+	PanoToPlane(filename, outfile, vangle, hangle, direction, 1, pR);
 	
 	
 	
