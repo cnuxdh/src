@@ -4,7 +4,6 @@
 #include"string.h"
 #include"stdlib.h"
 
-#include"panorama.hpp"
 
 
 //opencv
@@ -18,6 +17,10 @@
 	#include "opencv2/calib3d/calib3d.hpp"
 	using namespace cv;
 #endif
+
+
+#include"panorama.hpp"
+
 
 
 
