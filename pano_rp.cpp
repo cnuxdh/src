@@ -378,8 +378,8 @@ int main(int argc, char* argv[])
 
 
 	//6. generate projection images
-	PanoToPlanes(leftImageFile, anglestep, vangle, hangle, focalratio, R0, T0);
-	PanoToPlanes(rightImageFile, anglestep, vangle, hangle, focalratio, R, T);
+	PanoToPlanes(0,leftImageFile, anglestep, vangle, hangle, focalratio, R0, T0);
+	PanoToPlanes(1,rightImageFile, anglestep, vangle, hangle, focalratio, R, T);
 	
 	
 	
