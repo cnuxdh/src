@@ -102,16 +102,17 @@ int WriteBundlerOutFile(char* filepath, vector<CameraPara>& camParas )
 
 		for(int i=0; i<num_images; i++)
 		{
-			fprintf(f, "%0.10e %0.10e %0.10e \n",	camParas[i].focus, camParas[i].k1, camParas[i].k2);
-			
+			 fprintf(f, "%0.10e %0.10e %0.10e \n",	camParas[i].focus, camParas[i].k1, camParas[i].k2);
+			 
 			 fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].R[0], camParas[i].R[1],camParas[i].R[2]);
        fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].R[3], camParas[i].R[4],camParas[i].R[5]);
        fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].R[6], camParas[i].R[7],camParas[i].R[8]);
 
-       double t[3];
-       matrix_product(3, 3, 3, 1, camParas[i].R, camParas[i].t, t);
-       matrix_scale(3, 1, t, -1.0, t);
-       fprintf(f, "%0.10e %0.10e %0.10e\n", t[0], t[1], t[2]);
+       //double t[3];
+       //matrix_product(3, 3, 3, 1, camParas[i].R, camParas[i].t, t);
+       //matrix_scale(3, 1, t, -1.0, t);
+       //fprintf(f, "%0.10e %0.10e %0.10e\n", t[0], t[1], t[2]);
+       fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].t[0], camParas[i].t[1], camParas[i].t[2]);
 		}
 		fclose(f);
 	
@@ -438,7 +439,7 @@ int main(int argc, char* argv[])
 	
 	
 	//generate the bundler.out file 
-	
+	WriteBundlerOutFile("bundler.out", camParas);
 	
 	
 	int nImageNum = 2;
