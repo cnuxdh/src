@@ -10,12 +10,14 @@ SET(EXECUTABLE_OUTPUT_PATH ../)
 
 #include and link lib path
 INCLUDE_DIRECTORIES(/usr/local/include 
-                    /Users/xiedonghai/Programs/Project/modules/CvLib
+                    ../modules/CvLib
                     ../modules/5point
                     ../modules/matrix
                     ../modules/sfm-driver
                     ../modules/Corelib
-                    ../modules/Coredll)
+                    ../modules/Coredll
+                    ../modules
+                    )
 
 
 LINK_DIRECTORIES(/usr/local/lib        

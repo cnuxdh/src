@@ -8,6 +8,9 @@ using namespace std;
 
 
 
+//matrix lib
+#include "matrix/matrix.h"
+
 //5point lib
 #include"5point.h"
 
@@ -16,6 +19,7 @@ using namespace std;
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
+
 //cvlib
 #include"feature.hpp"
 #include"sift.hpp"
@@ -23,9 +27,21 @@ using namespace std;
 #include"panorama.hpp"
 #include"relativepose.hpp"
 #include"bundlerio.hpp"
+#include"defines.hpp"
 
 
 
+
+/*
+//for camera parameters
+typedef struct structCamera
+{
+	double focalLen;
+	double k1,k2;
+	double R[9];
+	double T[3];
+};
+*/
 
 
 //mosaic the image for feature matching
@@ -64,6 +80,44 @@ IplImage* VerticalMosaic(IplImage* pLeft, IplImage* pRight)
 
 			return pMosaicImage;
 }
+
+
+int WriteBundlerOutFile(char* filepath, vector<CameraPara>& camParas )
+{
+	
+		FILE *f = fopen(filepath, "w");
+    if (f == NULL) 
+    {
+        printf("Error opening file %s for writing\n", filepath);
+        return -1;
+    }
+    
+    int num_images = camParas.size();
+    int num_visible_points = 0; 
+
+    /* Print version number */
+    fprintf(f, "# Bundle file v0.3\n");
+    /* Print number of cameras and points */
+    fprintf(f, "%d %d\n", num_images, num_visible_points);
+
+		for(int i=0; i<num_images; i++)
+		{
+			fprintf(f, "%0.10e %0.10e %0.10e \n",	camParas[i].focus, camParas[i].k1, camParas[i].k2);
+			
+			 fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].R[0], camParas[i].R[1],camParas[i].R[2]);
+       fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].R[3], camParas[i].R[4],camParas[i].R[5]);
+       fprintf(f, "%0.10e %0.10e %0.10e\n", camParas[i].R[6], camParas[i].R[7],camParas[i].R[8]);
+
+       double t[3];
+       matrix_product(3, 3, 3, 1, camParas[i].R, camParas[i].t, t);
+       matrix_scale(3, 1, t, -1.0, t);
+       fprintf(f, "%0.10e %0.10e %0.10e\n", t[0], t[1], t[2]);
+		}
+		fclose(f);
+	
+		return 0;
+}
+
 
 
 
@@ -377,10 +431,34 @@ int main(int argc, char* argv[])
 	pModel->Save("sphericalModel.ply", vPts, vColors);
 
 
-	//6. generate projection images
-	PanoToPlanes(0,leftImageFile, anglestep, vangle, hangle, focalratio, R0, T0);
-	PanoToPlanes(1,rightImageFile, anglestep, vangle, hangle, focalratio, R, T);
+	//6. generate projection images, save them and the corresponding projective matrix into the files
+	vector<stCameraPara> camParas;
+	PanoToPlanes(0,leftImageFile, anglestep, vangle, hangle, focalratio, R0, T0, camParas);
+	PanoToPlanes(1,rightImageFile, anglestep, vangle, hangle, focalratio, R, T, camParas);
 	
+	
+	//generate the bundler.out file 
+	
+	
+	
+	int nImageNum = 2;
+  /* Write the options file */
+  char buf[512];
+  sprintf(buf, "pmvs_options.txt");
+  FILE *f_opt = fopen(buf, "w");
+  fprintf(f_opt, "level 2\n");
+  fprintf(f_opt, "csize 2\n");
+  fprintf(f_opt, "threshold 0.7\n");
+  fprintf(f_opt, "wsize 7\n");
+  fprintf(f_opt, "minImageNum 2\n");
+  fprintf(f_opt, "CPU 4\n");
+  fprintf(f_opt, "setEdge 0\n");
+  fprintf(f_opt, "useBound 0\n");
+  fprintf(f_opt, "useVisData 0\n");
+  fprintf(f_opt, "sequence -1\n");
+  fprintf(f_opt, "timages -1 0 %d\n", nImageNum);
+  fprintf(f_opt, "oimages -3\n");
+  fclose(f_opt);
 	
 	
 	return 0;
