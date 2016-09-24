@@ -442,12 +442,12 @@ int main(int argc, char* argv[])
 	WriteBundlerOutFile("bundler.out", camParas);
 	
 	
-	int nImageNum = 2;
+	int nImageNum = 2 * (360/anglestep);
   /* Write the options file */
   char buf[512];
   sprintf(buf, "pmvs_options.txt");
   FILE *f_opt = fopen(buf, "w");
-  fprintf(f_opt, "level 2\n");
+  fprintf(f_opt, "level 0\n");
   fprintf(f_opt, "csize 2\n");
   fprintf(f_opt, "threshold 0.7\n");
   fprintf(f_opt, "wsize 7\n");
@@ -460,6 +460,7 @@ int main(int argc, char* argv[])
   fprintf(f_opt, "timages -1 0 %d\n", nImageNum);
   fprintf(f_opt, "oimages -3\n");
   fclose(f_opt);
+	
 	
 	
 	return 0;
