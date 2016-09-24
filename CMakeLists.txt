@@ -78,3 +78,7 @@ ADD_EXECUTABLE(pano_rp pano_rp.cpp)
 TARGET_LINK_LIBRARIES(pano_rp ${OpenCV_LIBS} 
 minpack lapack blas image f2c cblas 5point ANN_char matrix 
 cvlib )
+
+
+ADD_EXECUTABLE(featureDetect featureDetect.cpp)
+TARGET_LINK_LIBRARIES(featureDetect ${OpenCV_LIBS} ANN_char cvlib)
