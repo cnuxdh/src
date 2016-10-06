@@ -81,4 +81,4 @@ cvlib )
 
 
 ADD_EXECUTABLE(featureDetect featureDetect.cpp)
-TARGET_LINK_LIBRARIES(featureDetect ${OpenCV_LIBS} ANN_char cvlib)
+TARGET_LINK_LIBRARIES(featureDetect ${OpenCV_LIBS} ANN_char cvlib gdal)
