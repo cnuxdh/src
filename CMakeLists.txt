@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(/usr/local/include
                     ../modules/sfm-driver
                     ../modules/Corelib
                     ../modules/Coredll
+                    ../modules/datalib
                     ../modules
                     )
 
@@ -23,9 +24,6 @@ INCLUDE_DIRECTORIES(/usr/local/include
 LINK_DIRECTORIES(/usr/local/lib        
                  ../lib
                  /Users/xiedonghai/Programs/Project/build/modules/CvLib
-                 /Users/xiedonghai/Programs/Project/build/modules/5point
-                 /Users/xiedonghai/Programs/Project/build/modules/CoreDll
-                 /Users/xiedonghai/Programs/Project/build/modules/siftLib
                  )
 
 
@@ -82,3 +80,6 @@ cvlib )
 
 ADD_EXECUTABLE(featureDetect featureDetect.cpp)
 TARGET_LINK_LIBRARIES(featureDetect ${OpenCV_LIBS} ANN_char cvlib gdal)
+
+ADD_EXECUTABLE(testCMat testCMat.cpp)
+TARGET_LINK_LIBRARIES(testCMat cvlib gdal)
